@@ -36,6 +36,7 @@
 #include <time.h>
 
 #include "capture.h"
+#include "render.h"
 
 #define LOG_TAG    "USBFastDemoJNI"
 #define DEV_NAME   "/dev/video0"
@@ -99,6 +100,7 @@ int grabFrame(char* p, int size)
 {
   	pthread_mutex_lock( &mutexGrabFrame );
     if (fbuffers[r_fbuf].start) {
+        processFrame( (char*)(ybuffers[r_fbuf].start), (char*)(fbuffers[r_fbuf].start), (int)width, (int)height, 4);       
         memcpy(p, fbuffers[r_fbuf].start, size);
 
   	    pthread_mutex_unlock( &mutexGrabFrame );
@@ -147,7 +149,7 @@ static void process_image(const void *p)
     // input:  YUV 4:2:2 YUY2(YUYV) ordering
     // output: RGBA interleaved, 8888
     fcvColorYCbCr422PseudoPlanarToRGBA8888u8((uint8_t*)ybuffers[w_fbuf].start, (uint8_t*)uv, width, height, 0, 0, (uint8_t*)fbuffers[w_fbuf].start, 0);
-    
+
     // Circular buffer manipulation
   	pthread_mutex_lock( &mutexGrabFrame );    
     w_fbuf ^= 1;

@@ -52,7 +52,7 @@ static int bresenham( Point* points, double x1, double y1, double x2, double y2,
 //------------------------------------------------------------------------------
 //  All of the FCV processing of the frame happens in this function.
 //------------------------------------------------------------------------------
-static void processFrame( char* y, char* rgba, int width, int height, int size);
+void processFrame( char* y, char* rgba, int width, int height, int bpp);
 
 //------------------------------------------------------------------------------
 //  JNI Interface
